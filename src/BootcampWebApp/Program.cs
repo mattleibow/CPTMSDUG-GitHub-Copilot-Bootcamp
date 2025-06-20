@@ -1,4 +1,5 @@
 using BootcampWebApp.Components;
+using BootcampWebApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddHttpClient();
+
+// Register application services
+builder.Services.AddScoped<IWeatherService, WeatherService>();
+builder.Services.AddHttpClient<IMonkeyService, MonkeyService>();
 
 var app = builder.Build();
 

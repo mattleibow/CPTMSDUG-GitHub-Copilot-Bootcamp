@@ -1,6 +1,7 @@
 @page "/monkeys"
 @attribute [StreamRendering]
-@inject HttpClient Http
+@inject IMonkeyService MonkeyService
+@using BootcampWebApp.Models
 
 <PageTitle>Monkeys</PageTitle>
 
@@ -41,27 +42,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            // Fetch monkey data from the specified URL
-            monkeys = await Http.GetFromJsonAsync<Monkey[]>("https://montemagno.com/monkeys.json");
-        }
-        catch (Exception ex)
-        {
-            // Handle any errors gracefully
-            Console.WriteLine($"Error loading monkeys: {ex.Message}");
-            monkeys = Array.Empty<Monkey>();
-        }
-    }
-
-    private class Monkey
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Location { get; set; } = string.Empty;
-        public string Details { get; set; } = string.Empty;
-        public string Image { get; set; } = string.Empty;
-        public int Population { get; set; }
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        monkeys = await MonkeyService.GetMonkeysAsync();
     }
 }
