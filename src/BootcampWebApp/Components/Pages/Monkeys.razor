@@ -1,0 +1,118 @@
+@page "/monkeys"
+@attribute [StreamRendering]
+@inject HttpClient Http
+
+<PageTitle>Monkeys</PageTitle>
+
+<h1>Amazing Monkeys</h1>
+
+<p>Discover fascinating monkeys from around the world!</p>
+
+@if (monkeys == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var monkey in monkeys)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    @if (!string.IsNullOrEmpty(monkey.Image))
+                    {
+                        <img src="@monkey.Image" class="card-img-top" alt="@monkey.Name" style="height: 200px; object-fit: cover;">
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@monkey.Name</h5>
+                        <p class="card-text"><strong>Location:</strong> @monkey.Location</p>
+                        <p class="card-text flex-grow-1">@monkey.Details</p>
+                        @if (monkey.Population.HasValue)
+                        {
+                            <p class="card-text"><small class="text-muted">Population: @monkey.Population.Value.ToString("N0")</small></p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private Monkey[]? monkeys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Try to fetch from the actual API
+            monkeys = await Http.GetFromJsonAsync<Monkey[]>("https://montemagno.com/monkeys.json");
+        }
+        catch
+        {
+            // Fallback to mock data if the API is not accessible
+            await Task.Delay(500); // Simulate loading time
+            
+            monkeys = new[]
+            {
+                new Monkey
+                {
+                    Name = "Baboon",
+                    Location = "Africa & Arabia",
+                    Details = "Baboons are African and Arabian Old World monkeys belonging to the genus Papio, part of the subfamily Cercopithecinae.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/baboon.jpg",
+                    Population = 10000
+                },
+                new Monkey
+                {
+                    Name = "Capuchin Monkey",
+                    Location = "Central & South America", 
+                    Details = "The capuchin monkeys are New World monkeys of the subfamily Cebinae. They are readily identified as the 'organ grinder' monkeys.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/capuchin.jpg",
+                    Population = 23000
+                },
+                new Monkey
+                {
+                    Name = "Blue Monkey",
+                    Location = "Central and East Africa",
+                    Details = "The blue monkey or diademed monkey is a species of Old World monkey native to Central and East Africa, ranging from the upper Congo River basin east to the East African Rift and south to northern Angola and Zambia.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/bluemonkey.jpg",
+                    Population = 200000
+                },
+                new Monkey
+                {
+                    Name = "Squirrel Monkey",
+                    Location = "Central & South America",
+                    Details = "The squirrel monkeys are the New World monkeys of the genus Saimiri. They are the only genus in the subfamily Saimirinae.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/squirrelmonkey.jpg",
+                    Population = 300000
+                },
+                new Monkey
+                {
+                    Name = "Golden Lion Tamarin",
+                    Location = "Brazil",
+                    Details = "The golden lion tamarin, also known as the golden marmoset, is a small New World monkey of the family Callitrichidae.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/goldenlion.jpg",
+                    Population = 3000
+                },
+                new Monkey
+                {
+                    Name = "Howler Monkey",
+                    Location = "Central & South America",
+                    Details = "Howler monkeys are among the largest of the New World monkeys. Fifteen species are currently recognised. Previously classified in the family Cebidae, they are now placed in the family Atelidae.",
+                    Image = "https://raw.githubusercontent.com/jamesmontemagno/app-monkeys/master/MonkeysApp/Resources/Images/howler.jpg",
+                    Population = 25000
+                }
+            };
+        }
+    }
+
+    private class Monkey
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+        public int? Population { get; set; }
+    }
+}
