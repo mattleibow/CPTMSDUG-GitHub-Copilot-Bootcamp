@@ -37,3 +37,6 @@ jobs:
         run: |
           dotnet --version
           echo "✅ .NET 9 SDK is ready for development"
+
+      - name: Configure Copilot firewall allowlist
+        run: echo "COPILOT_AGENT_ALLOWED_HOSTS=montemagno.com" >> $GITHUB_ENV
