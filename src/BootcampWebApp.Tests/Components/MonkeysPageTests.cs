@@ -3,7 +3,7 @@ using BootcampWebApp.Components.Pages;
 using BootcampWebApp.Services;
 using BootcampWebApp.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 
 namespace BootcampWebApp.Tests.Components;
 
@@ -33,11 +33,10 @@ public class MonkeysPageTests : TestContext
             }
         };
 
-        var mockMonkeyService = new Mock<IMonkeyService>();
-        mockMonkeyService.Setup(x => x.GetMonkeysAsync())
-                        .ReturnsAsync(testMonkeys);
+        var mockMonkeyService = Substitute.For<IMonkeyService>();
+        mockMonkeyService.GetMonkeysAsync().Returns(testMonkeys);
 
-        Services.AddSingleton(mockMonkeyService.Object);
+        Services.AddSingleton(mockMonkeyService);
 
         // Act
         var component = RenderComponent<Monkeys>();
@@ -56,12 +55,12 @@ public class MonkeysPageTests : TestContext
     public void MonkeysPage_InitiallyShowsLoading()
     {
         // Arrange
-        var mockMonkeyService = new Mock<IMonkeyService>();
+        var mockMonkeyService = Substitute.For<IMonkeyService>();
         // Setup a long-running task to keep loading state
-        mockMonkeyService.Setup(x => x.GetMonkeysAsync())
+        mockMonkeyService.GetMonkeysAsync()
                         .Returns(Task.Delay(1000).ContinueWith<Monkey[]>(_ => new Monkey[0]));
 
-        Services.AddSingleton(mockMonkeyService.Object);
+        Services.AddSingleton(mockMonkeyService);
 
         // Act
         var component = RenderComponent<Monkeys>();
@@ -74,11 +73,10 @@ public class MonkeysPageTests : TestContext
     public void MonkeysPage_WithEmptyData_RendersEmptyGrid()
     {
         // Arrange
-        var mockMonkeyService = new Mock<IMonkeyService>();
-        mockMonkeyService.Setup(x => x.GetMonkeysAsync())
-                        .ReturnsAsync(Array.Empty<Monkey>());
+        var mockMonkeyService = Substitute.For<IMonkeyService>();
+        mockMonkeyService.GetMonkeysAsync().Returns(Array.Empty<Monkey>());
 
-        Services.AddSingleton(mockMonkeyService.Object);
+        Services.AddSingleton(mockMonkeyService);
 
         // Act
         var component = RenderComponent<Monkeys>();
