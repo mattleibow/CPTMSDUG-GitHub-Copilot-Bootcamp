@@ -1,0 +1,143 @@
+@page "/monkeys"
+@attribute [StreamRendering]
+@inject HttpClient HttpClient
+@using System.Text.Json.Serialization
+
+<PageTitle>Monkeys</PageTitle>
+
+<h1>🐒 Awesome Monkeys</h1>
+
+<p>Discover amazing monkey species from around the world!</p>
+
+@if (monkeys == null)
+{
+    <p><em>Loading monkey data...</em></p>
+}
+else if (monkeys.Length == 0)
+{
+    <p><em>No monkeys found. They might be hiding!</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var monkey in monkeys)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    @if (!string.IsNullOrEmpty(monkey.Image))
+                    {
+                        <img src="@monkey.Image" class="card-img-top" alt="@monkey.Name" style="height: 250px; object-fit: cover;" onerror="this.style.display='none'" />
+                    }
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@monkey.Name</h5>
+                        @if (!string.IsNullOrEmpty(monkey.Location))
+                        {
+                            <p class="card-text"><strong>📍 Location:</strong> @monkey.Location</p>
+                        }
+                        @if (!string.IsNullOrEmpty(monkey.Details))
+                        {
+                            <p class="card-text flex-grow-1">@monkey.Details</p>
+                        }
+                        <div class="mt-auto">
+                            @if (monkey.Population > 0)
+                            {
+                                <p class="card-text"><small class="text-muted">👥 Population: @monkey.Population.ToString("N0")</small></p>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private Monkey[]? monkeys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetch monkey data from the API
+            monkeys = await HttpClient.GetFromJsonAsync<Monkey[]>("https://montemagno.com/monkeys.json") ?? Array.Empty<Monkey>();
+        }
+        catch (Exception ex)
+        {
+            // Handle errors gracefully - in a real app you'd log this
+            Console.WriteLine($"Error fetching monkey data: {ex.Message}");
+            
+            // Provide some sample data as fallback for demo purposes
+            monkeys = GetSampleMonkeys();
+        }
+    }
+
+    private static Monkey[] GetSampleMonkeys() => new[]
+    {
+        new Monkey
+        {
+            Name = "Baboon",
+            Location = "Africa and Arabia",
+            Details = "Baboons are among the largest non-hominoid primates and have existed for at least two million years. They are highly social animals and live in troops.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Papio_anubis_%28Serengeti%2C_2009%29.jpg/300px-Papio_anubis_%28Serengeti%2C_2009%29.jpg",
+            Population = 250000
+        },
+        new Monkey
+        {
+            Name = "Capuchin Monkey",
+            Location = "Central and South America",
+            Details = "Capuchin monkeys are New World monkeys known for their intelligence and their use of tools. They have excellent problem-solving abilities.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Capuchin_Costa_Rica.jpg/300px-Capuchin_Costa_Rica.jpg",
+            Population = 100000
+        },
+        new Monkey
+        {
+            Name = "Japanese Macaque",
+            Location = "Japan",
+            Details = "The Japanese macaque, also known as the snow monkey, is famous for bathing in hot springs during winter. They are very adaptable to cold climates.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Macaca_fuscata_fuscata1.jpg/300px-Macaca_fuscata_fuscata1.jpg",
+            Population = 80000
+        },
+        new Monkey
+        {
+            Name = "Golden Lion Tamarin",
+            Location = "Brazil",
+            Details = "Golden lion tamarins are small, endangered primates known for their distinctive golden mane. They are excellent at jumping between trees.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Golden_lion_tamarin_portrait3.jpg/300px-Golden_lion_tamarin_portrait3.jpg",
+            Population = 3000
+        },
+        new Monkey
+        {
+            Name = "Howler Monkey",
+            Location = "Central and South America",
+            Details = "Howler monkeys are known for their loud calls that can be heard up to 3 miles away. They are one of the loudest land animals.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Alouatta_seniculus_Red_Howler_MonkeyFrenchGuiana.jpg/300px-Alouatta_seniculus_Red_Howler_MonkeyFrenchGuiana.jpg",
+            Population = 50000
+        },
+        new Monkey
+        {
+            Name = "Proboscis Monkey",
+            Location = "Borneo",
+            Details = "Proboscis monkeys are known for their distinctive large noses and are excellent swimmers. They are endangered and endemic to Borneo.",
+            Image = "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Proboscis_Monkey_in_Borneo.jpg/300px-Proboscis_Monkey_in_Borneo.jpg",
+            Population = 7000
+        }
+    };
+
+    private class Monkey
+    {
+        [JsonPropertyName("name")]
+        public string Name { get; set; } = string.Empty;
+        
+        [JsonPropertyName("location")]
+        public string Location { get; set; } = string.Empty;
+        
+        [JsonPropertyName("details")]
+        public string Details { get; set; } = string.Empty;
+        
+        [JsonPropertyName("image")]
+        public string Image { get; set; } = string.Empty;
+        
+        [JsonPropertyName("population")]
+        public int Population { get; set; }
+    }
+}
