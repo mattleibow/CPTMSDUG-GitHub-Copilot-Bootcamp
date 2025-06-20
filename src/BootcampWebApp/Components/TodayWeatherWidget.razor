@@ -1,0 +1,19 @@
+@inject IWeatherService WeatherService
+
+@* This component demonstrates that the WeatherService is reusable *@
+@if (todayForecast != null)
+{
+    <div class="alert alert-info">
+        <strong>Today's Weather:</strong> @todayForecast.Summary, @todayForecast.TemperatureC°C
+    </div>
+}
+
+@code {
+    private WeatherForecast? todayForecast;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var forecasts = await WeatherService.GetForecastAsync();
+        todayForecast = forecasts.FirstOrDefault();
+    }
+}
