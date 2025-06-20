@@ -70,6 +70,41 @@ When creating test projects:
 6. Tests must pass before code changes are considered complete
 7. **Verify test execution**: Always confirm tests actually ran by checking test results output and ensuring test discovery/execution occurred successfully
 
+## Playwright Testing Requirements
+
+When using Playwright MCP tools for browser testing and screenshot capture, follow these specific guidelines:
+
+### Screenshot Capture Rules
+- **Format**: Always capture screenshots as uncompressed PNG format, never JPEG
+- **Filename Only**: Screenshots must only be captured with a filename, not a full path
+- **Raw Parameter**: Always use the `raw: true` parameter to ensure uncompressed PNG format
+
+### Screenshot Directory Locations
+Screenshots will always be captured to one of the following directories:
+- `$RUNNER_TEMP/artifacts/screenshots/output` (GitHub runner environment)
+- `./artifacts/screenshots/output` (VS Code workspace environment)
+
+### Path Handling Requirements
+- **Check Both Paths**: Always check both directory locations as either one may be used depending on the environment
+- **File Copying**: After capturing a screenshot, copy it from the capture location to the desired location
+- **Environment Detection**: The MCP tool will automatically determine which path is available
+
+### Implementation Guidelines
+1. Use only filename when calling Playwright screenshot functions
+2. Set `raw: true` parameter for uncompressed PNG format
+3. After screenshot capture, check both possible directories for the file
+4. Copy the screenshot from the found location to your desired destination
+5. Handle cases where the file might exist in either location
+
+### Example Usage Pattern
+```
+1. Capture screenshot with filename only and raw: true
+2. Check for file in $RUNNER_TEMP/artifacts/screenshots/output/
+3. If not found, check for file in ./artifacts/screenshots/output/
+4. Copy found file to desired location
+5. Use the copied file for further processing
+```
+
 ## Additional Notes
 
 - Prioritize .NET 9 specific features and APIs when available
