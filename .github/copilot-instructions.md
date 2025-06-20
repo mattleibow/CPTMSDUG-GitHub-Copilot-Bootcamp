@@ -10,15 +10,20 @@ dotnet --version
 ```
 
 ### Install .NET 9 SDK if not available
-1. **Download**: Visit [https://dotnet.microsoft.com/download/dotnet/9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
-2. **Select**: Choose the appropriate SDK installer for your operating system
-3. **Install**: Run the installer and follow the setup instructions
-4. **Verify**: Run `dotnet --version` to confirm .NET 9.x.x is installed
+**Linux/macOS**:
+```bash
+curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
+```
 
-### Alternative Installation Methods
-- **Windows**: Use `winget install Microsoft.DotNet.SDK.9`
-- **macOS**: Use `brew install --cask dotnet-sdk`
-- **Linux**: Follow distribution-specific instructions on the Microsoft docs
+**Windows**:
+```powershell
+Invoke-WebRequest -Uri https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1; .\dotnet-install.ps1 -Channel 9.0
+```
+
+**Verify installation**:
+```bash
+dotnet --version
+```
 
 ## .NET Version Requirements
 
