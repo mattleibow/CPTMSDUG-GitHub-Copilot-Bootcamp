@@ -3,7 +3,7 @@ using BootcampWebApp.Components.Pages;
 using BootcampWebApp.Services;
 using BootcampWebApp.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
+using NSubstitute;
 
 namespace BootcampWebApp.Tests.Components;
 
@@ -29,11 +29,10 @@ public class WeatherPageTests : TestContext
             }
         };
 
-        var mockWeatherService = new Mock<IWeatherService>();
-        mockWeatherService.Setup(x => x.GetWeatherForecastsAsync())
-                         .ReturnsAsync(testForecasts);
+        var mockWeatherService = Substitute.For<IWeatherService>();
+        mockWeatherService.GetWeatherForecastsAsync().Returns(testForecasts);
 
-        Services.AddSingleton(mockWeatherService.Object);
+        Services.AddSingleton(mockWeatherService);
 
         // Act
         var component = RenderComponent<Weather>();
@@ -50,12 +49,12 @@ public class WeatherPageTests : TestContext
     public void WeatherPage_InitiallyShowsLoading()
     {
         // Arrange
-        var mockWeatherService = new Mock<IWeatherService>();
+        var mockWeatherService = Substitute.For<IWeatherService>();
         // Setup a long-running task to keep loading state
-        mockWeatherService.Setup(x => x.GetWeatherForecastsAsync())
+        mockWeatherService.GetWeatherForecastsAsync()
                          .Returns(Task.Delay(1000).ContinueWith<WeatherForecast[]>(_ => new WeatherForecast[0]));
 
-        Services.AddSingleton(mockWeatherService.Object);
+        Services.AddSingleton(mockWeatherService);
 
         // Act
         var component = RenderComponent<Weather>();

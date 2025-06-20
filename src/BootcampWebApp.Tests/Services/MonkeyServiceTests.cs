@@ -1,7 +1,5 @@
 using BootcampWebApp.Services;
 using BootcampWebApp.Models;
-using Moq;
-using Moq.Protected;
 using System.Net.Http.Json;
 using System.Net;
 using System.Text.Json;
@@ -50,29 +48,38 @@ public class MonkeyServiceTests
 
     private static HttpClient CreateMockHttpClient<T>(T responseData, HttpStatusCode statusCode)
     {
-        var mockHandler = new Mock<HttpMessageHandler>();
-        
-        HttpResponseMessage response;
-        if (statusCode == HttpStatusCode.OK && responseData != null)
+        var mockHandler = new TestHttpMessageHandler(responseData, statusCode);
+        return new HttpClient(mockHandler);
+    }
+
+    private class TestHttpMessageHandler : HttpMessageHandler
+    {
+        private readonly object? _responseData;
+        private readonly HttpStatusCode _statusCode;
+
+        public TestHttpMessageHandler(object? responseData, HttpStatusCode statusCode)
         {
-            var json = JsonSerializer.Serialize(responseData);
-            response = new HttpResponseMessage(statusCode)
+            _responseData = responseData;
+            _statusCode = statusCode;
+        }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            HttpResponseMessage response;
+            if (_statusCode == HttpStatusCode.OK && _responseData != null)
             {
-                Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
-            };
-        }
-        else
-        {
-            response = new HttpResponseMessage(statusCode);
-        }
+                var json = JsonSerializer.Serialize(_responseData);
+                response = new HttpResponseMessage(_statusCode)
+                {
+                    Content = new StringContent(json, System.Text.Encoding.UTF8, "application/json")
+                };
+            }
+            else
+            {
+                response = new HttpResponseMessage(_statusCode);
+            }
 
-        mockHandler.Protected()
-            .Setup<Task<HttpResponseMessage>>(
-                "SendAsync",
-                ItExpr.IsAny<HttpRequestMessage>(),
-                ItExpr.IsAny<CancellationToken>())
-            .ReturnsAsync(response);
-
-        return new HttpClient(mockHandler.Object);
+            return Task.FromResult(response);
+        }
     }
 }

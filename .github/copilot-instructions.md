@@ -52,14 +52,23 @@ When creating new .NET projects:
 - Use `[Fact]` for simple tests and `[Theory]` for parameterized tests
 - Follow AAA pattern: Arrange, Act, Assert
 
+### Mocking Framework
+- **Use NSubstitute**: The preferred mocking framework for this project is NSubstitute
+- Reference NSubstitute documentation: https://nsubstitute.github.io/
+- Getting started guide: https://nsubstitute.github.io/docs/2010-01-01-getting-started.html
+- Use `Substitute.For<T>()` to create mock objects
+- Use `.Returns()` to configure return values for mock methods
+- NSubstitute provides a clean, simple syntax for mocking dependencies
+
 ### Test Project Setup
 When creating test projects:
 1. Use `dotnet new xunit` for C# unit test projects
 2. Add bUnit package for Blazor component tests: `dotnet add package bunit`
-3. Add project references to the code being tested
-4. Ensure tests run with `dotnet test`
-5. Tests must pass before code changes are considered complete
-6. **Verify test execution**: Always confirm tests actually ran by checking test results output and ensuring test discovery/execution occurred successfully
+3. Add NSubstitute package for mocking: `dotnet add package NSubstitute`
+4. Add project references to the code being tested
+5. Ensure tests run with `dotnet test`
+6. Tests must pass before code changes are considered complete
+7. **Verify test execution**: Always confirm tests actually ran by checking test results output and ensuring test discovery/execution occurred successfully
 
 ## Additional Notes
 
