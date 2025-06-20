@@ -1,0 +1,67 @@
+@page "/monkeys"
+@attribute [StreamRendering]
+@inject HttpClient Http
+
+<PageTitle>Monkeys</PageTitle>
+
+<h1>🐒 Amazing Monkeys</h1>
+
+<p>Discover fascinating monkey species from around the world!</p>
+
+@if (monkeys == null)
+{
+    <p><em>Loading amazing monkeys...</em></p>
+}
+else
+{
+    <div class="row">
+        @foreach (var monkey in monkeys)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <img src="@monkey.Image" class="card-img-top" alt="@monkey.Name" style="height: 200px; object-fit: cover;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@monkey.Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">📍 @monkey.Location</h6>
+                        <p class="card-text flex-grow-1">@monkey.Details</p>
+                        <div class="mt-auto">
+                            <small class="text-muted">
+                                👥 Population: @monkey.Population.ToString("N0")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private Monkey[]? monkeys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetch monkey data from the specified URL
+            monkeys = await Http.GetFromJsonAsync<Monkey[]>("https://montemagno.com/monkeys.json");
+        }
+        catch (Exception ex)
+        {
+            // Handle any errors gracefully
+            Console.WriteLine($"Error loading monkeys: {ex.Message}");
+            monkeys = Array.Empty<Monkey>();
+        }
+    }
+
+    private class Monkey
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+        public int Population { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
