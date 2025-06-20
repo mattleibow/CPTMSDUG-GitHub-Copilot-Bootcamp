@@ -24,6 +24,42 @@ When creating new .NET projects:
 3. Test compilation with `dotnet build` before finalizing
 4. Use the latest C# language version supported by .NET 9
 
+## Testing Requirements
+
+**All code changes must include corresponding unit tests. Testing is mandatory, not optional.**
+
+### Test Framework Selection
+- **Blazor Components**: Use bUnit for testing Blazor components and pages
+- **C# Code**: Use xUnit for testing C# classes, services, and business logic
+- **Test Coverage**: Write at least a couple of tests to demonstrate that changes work correctly
+
+### Project Structure for Tests
+- **New Source Projects**: Always create corresponding test projects when adding new source projects
+- **Naming Convention**: Test projects should follow the pattern `{ProjectName}.Tests`
+- **Target Framework**: Test projects must also target `net9.0`
+
+### bUnit Testing Guidelines
+- Reference the bUnit documentation: https://bunit.dev
+- Getting started guide: https://bunit.dev/docs/getting-started
+- Test Blazor component rendering, interactions, and state changes
+- Use TestHost and TestContext for component testing
+- Mock external dependencies and services
+
+### xUnit Testing Guidelines
+- Reference xUnit documentation: https://xunit.net
+- Getting started: https://xunit.net/docs/getting-started/v2/netcore/visual-studio
+- Microsoft docs: https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-csharp-with-xunit
+- Use `[Fact]` for simple tests and `[Theory]` for parameterized tests
+- Follow AAA pattern: Arrange, Act, Assert
+
+### Test Project Setup
+When creating test projects:
+1. Use `dotnet new xunit` for C# unit test projects
+2. Add bUnit package for Blazor component tests: `dotnet add package bunit`
+3. Add project references to the code being tested
+4. Ensure tests run with `dotnet test`
+5. Tests must pass before code changes are considered complete
+
 ## Additional Notes
 
 - Prioritize .NET 9 specific features and APIs when available
