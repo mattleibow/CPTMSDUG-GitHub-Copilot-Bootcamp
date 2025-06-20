@@ -404,3 +404,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Node.js dependencies and build files
+node_modules/
+package.json
+package-lock.json
+take-screenshots.js
