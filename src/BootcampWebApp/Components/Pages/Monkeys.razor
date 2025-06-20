@@ -1,0 +1,81 @@
+@page "/monkeys"
+@attribute [StreamRendering]
+@using BootcampWebApp.Models
+@using BootcampWebApp.Services
+@inject MonkeyService MonkeyService
+
+<PageTitle>Monkeys</PageTitle>
+
+<h1>🐵 Amazing Monkeys</h1>
+
+<p>Discover fascinating monkey species from around the world!</p>
+
+@if (monkeys == null)
+{
+    <div class="d-flex justify-content-center">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <p class="text-center mt-3"><em>Loading monkey data...</em></p>
+}
+else if (!monkeys.Any())
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>Oops!</strong> No monkey data could be loaded at this time. Please try again later.
+    </div>
+}
+else
+{
+    <div class="row">
+        @foreach (var monkey in monkeys)
+        {
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <img src="@monkey.Image" class="card-img-top" alt="@monkey.Name" style="height: 250px; object-fit: cover;" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@monkey.Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">📍 @monkey.Location</h6>
+                        
+                        <div class="mb-3">
+                            <small class="text-muted">
+                                <strong>Population:</strong> @monkey.Population.ToString("N0")<br />
+                                <strong>Coordinates:</strong> @monkey.Latitude.ToString("F2")°, @monkey.Longitude.ToString("F2")°
+                            </small>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            <button class="btn btn-outline-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#details-@monkey.Name.Replace(" ", "")" aria-expanded="false">
+                                Learn More
+                            </button>
+                        </div>
+                        
+                        <div class="collapse mt-2" id="details-@monkey.Name.Replace(" ", "")">
+                            <div class="card card-body bg-light">
+                                <small>@monkey.Details</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="mt-4">
+        <div class="alert alert-info" role="alert">
+            <strong>Did you know?</strong> We found @monkeys.Count amazing monkey species! Each has unique characteristics and habitats.
+        </div>
+    </div>
+}
+
+@code {
+    private List<Monkey>? monkeys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate loading delay for better UX with streaming rendering
+        await Task.Delay(500);
+        
+        monkeys = await MonkeyService.GetMonkeysAsync();
+    }
+}
