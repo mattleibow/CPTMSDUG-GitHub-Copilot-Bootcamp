@@ -1,0 +1,68 @@
+@page "/monkeys"
+@attribute [StreamRendering]
+@inject HttpClient HttpClient
+
+<PageTitle>Monkeys</PageTitle>
+
+<h1>Monkeys</h1>
+
+<p>This component demonstrates showing data from an external API.</p>
+
+@if (monkeys == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Location</th>
+                <th>Population</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var monkey in monkeys)
+            {
+                <tr>
+                    <td>@monkey.Name</td>
+                    <td>@monkey.Location</td>
+                    <td>@monkey.Population.ToString("N0")</td>
+                    <td>@monkey.Details</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private Monkey[]? monkeys;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // Fetch monkey data from the API
+            monkeys = await HttpClient.GetFromJsonAsync<Monkey[]>("https://montemagno.com/monkeys.json");
+        }
+        catch (Exception ex)
+        {
+            // Log error or handle gracefully
+            Console.WriteLine($"Error fetching monkey data: {ex.Message}");
+            monkeys = Array.Empty<Monkey>();
+        }
+    }
+
+    private class Monkey
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string Image { get; set; } = string.Empty;
+        public int Population { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+    }
+}
