@@ -1,29 +1,8 @@
 # GitHub Copilot Instructions
 
-## Installation Requirements
+## Prerequisites
 
-Before working with this repository, ensure .NET 9 SDK is installed:
-
-### Check Current Installation
-```bash
-dotnet --version
-```
-
-### Install .NET 9 SDK if not available
-**Linux/macOS**:
-```bash
-curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 9.0
-```
-
-**Windows**:
-```powershell
-Invoke-WebRequest -Uri https://dot.net/v1/dotnet-install.ps1 -OutFile dotnet-install.ps1; .\dotnet-install.ps1 -Channel 9.0
-```
-
-**Verify installation**:
-```bash
-dotnet --version
-```
+This repository requires .NET 9 SDK. If you encounter issues with project creation or building, please ensure .NET 9 SDK is installed on your system and report any setup problems to the user for manual resolution according to your organization's development environment policies.
 
 ## .NET Version Requirements
 
