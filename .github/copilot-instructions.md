@@ -59,6 +59,7 @@ When creating test projects:
 3. Add project references to the code being tested
 4. Ensure tests run with `dotnet test`
 5. Tests must pass before code changes are considered complete
+6. **Verify test execution**: Always confirm tests actually ran by checking test results output and ensuring test discovery/execution occurred successfully
 
 ## Additional Notes
 
