@@ -37,3 +37,8 @@ jobs:
         run: |
           dotnet --version
           echo "✅ .NET 9 SDK is ready for development"
+
+      - name: Install .NET MAUI workload
+        run: |
+          dotnet workload install maui-android --source https://api.nuget.org/v3/index.json
+          echo "✅ .NET MAUI workload is ready for development"
