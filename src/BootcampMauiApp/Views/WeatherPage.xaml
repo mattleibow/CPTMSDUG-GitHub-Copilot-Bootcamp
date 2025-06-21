@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BootcampMauiApp.Views.WeatherPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Weather">
+    
+    <ScrollView>
+        <StackLayout Spacing="15" Padding="15">
+            
+            <Label 
+                Text="Weather" 
+                Style="{StaticResource Headline}"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="This page demonstrates showing data."
+                FontSize="16"
+                HorizontalOptions="Center" />
+
+            <Label 
+                x:Name="LoadingLabel"
+                Text="Loading..."
+                FontStyle="Italic"
+                HorizontalOptions="Center" />
+
+            <CollectionView x:Name="ForecastCollectionView" 
+                            ItemsSource="{Binding Forecasts}"
+                            IsVisible="False">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" RowDefinitions="Auto,Auto">
+                            <Frame Grid.RowSpan="2" BackgroundColor="{StaticResource Gray100}" CornerRadius="8">
+                                <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto">
+                                    <Label Grid.Column="0" Grid.Row="0" Text="Date" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Grid.Row="0" Text="Temp. (C)" FontAttributes="Bold" />
+                                    <Label Grid.Column="2" Grid.Row="0" Text="Temp. (F)" FontAttributes="Bold" />
+                                    <Label Grid.Column="3" Grid.Row="0" Text="Summary" FontAttributes="Bold" />
+                                    
+                                    <Label Grid.Column="0" Grid.Row="1" Text="{Binding Date, StringFormat='{0:M/d/yyyy}'}" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding TemperatureC}" />
+                                    <Label Grid.Column="2" Grid.Row="1" Text="{Binding TemperatureF}" />
+                                    <Label Grid.Column="3" Grid.Row="1" Text="{Binding Summary}" />
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

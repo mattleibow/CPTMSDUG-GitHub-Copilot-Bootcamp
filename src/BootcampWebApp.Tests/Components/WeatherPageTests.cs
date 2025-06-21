@@ -1,7 +1,7 @@
 using Bunit;
 using BootcampWebApp.Components.Pages;
-using BootcampWebApp.Services;
-using BootcampWebApp.Models;
+using BootcampShared.Services;
+using BootcampShared.Models;
 using Microsoft.Extensions.DependencyInjection;
 using NSubstitute;
 

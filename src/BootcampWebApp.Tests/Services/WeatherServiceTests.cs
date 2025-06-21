@@ -1,5 +1,5 @@
-using BootcampWebApp.Services;
-using BootcampWebApp.Models;
+using BootcampShared.Services;
+using BootcampShared.Models;
 
 namespace BootcampWebApp.Tests.Services;
 

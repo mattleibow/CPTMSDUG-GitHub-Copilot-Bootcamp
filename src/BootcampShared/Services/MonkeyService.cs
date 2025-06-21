@@ -1,6 +1,7 @@
-using BootcampWebApp.Models;
+using BootcampShared.Models;
+using System.Net.Http.Json;
 
-namespace BootcampWebApp.Services;
+namespace BootcampShared.Services;
 
 public class MonkeyService : IMonkeyService
 {
