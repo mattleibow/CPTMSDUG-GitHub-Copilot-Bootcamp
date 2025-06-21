@@ -1,5 +1,5 @@
-using BootcampWebApp.Services;
-using BootcampWebApp.Models;
+using BootcampShared.Services;
+using BootcampShared.Models;
 using System.Net.Http.Json;
 using System.Net;
 using System.Text.Json;
