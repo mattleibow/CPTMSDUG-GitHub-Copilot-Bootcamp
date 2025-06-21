@@ -1,6 +1,6 @@
-using BootcampWebApp.Models;
+using BootcampShared.Models;
 
-namespace BootcampWebApp.Services;
+namespace BootcampShared.Services;
 
 public class WeatherService : IWeatherService
 {

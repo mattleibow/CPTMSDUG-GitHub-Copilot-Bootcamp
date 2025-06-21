@@ -1,7 +1,7 @@
 using BootcampShared.Services;
 using BootcampShared.Models;
 
-namespace BootcampWebApp.Tests.Services;
+namespace BootcampShared.Tests.Services;
 
 public class WeatherServiceTests
 {
@@ -21,7 +21,6 @@ public class WeatherServiceTests
         {
             Assert.True(forecast.Date > DateOnly.FromDateTime(DateTime.Now));
             Assert.InRange(forecast.TemperatureC, -20, 55);
-            Assert.NotNull(forecast.Summary);
             Assert.NotNull(forecast.Summary);
             // TemperatureF uses original formula so just verify it's computed (not a specific range)
             Assert.NotEqual(0, forecast.TemperatureF); // Just verify it's computed

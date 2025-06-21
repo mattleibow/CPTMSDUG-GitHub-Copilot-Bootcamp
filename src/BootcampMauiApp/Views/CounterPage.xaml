@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BootcampMauiApp.Views.CounterPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Counter">
+    
+    <ScrollView>
+        <StackLayout Spacing="25" Padding="30,0" VerticalOptions="Center">
+            
+            <Label 
+                Text="Counter" 
+                Style="{StaticResource Headline}"
+                HorizontalOptions="Center" />
+
+            <Label 
+                x:Name="CounterLabel"
+                Text="Current count: 0"
+                FontSize="18"
+                HorizontalOptions="Center" />
+
+            <Button 
+                Text="Click me"
+                Clicked="OnCounterClicked"
+                HorizontalOptions="Center" />
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

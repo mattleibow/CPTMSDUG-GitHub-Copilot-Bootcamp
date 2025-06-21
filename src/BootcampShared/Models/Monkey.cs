@@ -1,4 +1,4 @@
-namespace BootcampWebApp.Models;
+namespace BootcampShared.Models;
 
 public class Monkey
 {

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="BootcampMauiApp.Views.MonkeysPage"
+             xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             Title="Monkeys">
+    
+    <ScrollView>
+        <StackLayout Spacing="15" Padding="15">
+            
+            <Label 
+                Text="🐒 Amazing Monkeys" 
+                Style="{StaticResource Headline}"
+                HorizontalOptions="Center" />
+
+            <Label 
+                Text="Discover fascinating monkey species from around the world!"
+                FontSize="16"
+                HorizontalOptions="Center" />
+
+            <Label 
+                x:Name="LoadingLabel"
+                Text="Loading amazing monkeys..."
+                FontStyle="Italic"
+                HorizontalOptions="Center" />
+
+            <CollectionView x:Name="MonkeyCollectionView" 
+                            ItemsSource="{Binding Monkeys}"
+                            IsVisible="False">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Frame BackgroundColor="{StaticResource Gray100}" CornerRadius="8" Padding="15">
+                                <StackLayout Spacing="10">
+                                    <Image Source="{Binding Image}" 
+                                           HeightRequest="200" 
+                                           Aspect="AspectFill"
+                                           WidthRequest="300" />
+                                    
+                                    <Label Text="{Binding Name}" 
+                                           Style="{StaticResource SubHeadline}" />
+                                    
+                                    <Label Text="{Binding Location, StringFormat='📍 {0}'}" 
+                                           TextColor="{StaticResource Gray600}" />
+                                    
+                                    <Label Text="{Binding Details}" 
+                                           FontSize="14" />
+                                    
+                                    <Label Text="{Binding Population, StringFormat='👥 Population: {0:N0}'}" 
+                                           FontSize="12"
+                                           TextColor="{StaticResource Gray500}" />
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

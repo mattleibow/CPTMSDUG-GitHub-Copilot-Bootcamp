@@ -4,7 +4,7 @@ using System.Net.Http.Json;
 using System.Net;
 using System.Text.Json;
 
-namespace BootcampWebApp.Tests.Services;
+namespace BootcampShared.Tests.Services;
 
 public class MonkeyServiceTests
 {
@@ -35,7 +35,7 @@ public class MonkeyServiceTests
     public async Task GetMonkeysAsync_WithHttpError_ReturnsEmptyArray()
     {
         // Arrange
-        var mockHttpClient = CreateMockHttpClient<Monkey[]>(Array.Empty<Monkey>(), HttpStatusCode.NotFound);
+        var mockHttpClient = CreateMockHttpClient<Monkey[]>(null, HttpStatusCode.NotFound);
         var monkeyService = new MonkeyService(mockHttpClient);
 
         // Act
@@ -48,8 +48,11 @@ public class MonkeyServiceTests
 
     private static HttpClient CreateMockHttpClient<T>(T responseData, HttpStatusCode statusCode)
     {
-        var mockHandler = new TestHttpMessageHandler(responseData, statusCode);
-        return new HttpClient(mockHandler);
+        var handler = new TestHttpMessageHandler(responseData, statusCode);
+        return new HttpClient(handler)
+        {
+            BaseAddress = new Uri("https://example.com/")
+        };
     }
 
     private class TestHttpMessageHandler : HttpMessageHandler

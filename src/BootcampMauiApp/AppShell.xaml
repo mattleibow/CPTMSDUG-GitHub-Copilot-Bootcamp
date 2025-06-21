@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="BootcampMauiApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:BootcampMauiApp.Views"
+    Title="BootcampMauiApp">
+
+    <TabBar>
+        <ShellContent
+            Title="Home"
+            ContentTemplate="{DataTemplate local:HomePage}"
+            Route="HomePage" />
+
+        <ShellContent
+            Title="Counter"
+            ContentTemplate="{DataTemplate local:CounterPage}"
+            Route="CounterPage" />
+
+        <ShellContent
+            Title="Weather"
+            ContentTemplate="{DataTemplate local:WeatherPage}"
+            Route="WeatherPage" />
+
+        <ShellContent
+            Title="Monkeys"
+            ContentTemplate="{DataTemplate local:MonkeysPage}"
+            Route="MonkeysPage" />
+    </TabBar>
+
+</Shell>
