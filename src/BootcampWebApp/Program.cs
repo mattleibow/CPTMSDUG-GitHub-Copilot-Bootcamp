@@ -1,5 +1,5 @@
 using BootcampWebApp.Components;
-using BootcampWebApp.Services;
+using BootcampShared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
