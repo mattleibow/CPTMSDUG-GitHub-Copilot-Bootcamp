@@ -1,0 +1,176 @@
+@page "/monkeys"
+@rendermode InteractiveServer
+@using BootcampWebApp.Models
+@using BootcampWebApp.Services
+@inject MonkeyService MonkeyService
+
+<PageTitle>Adopt-a-Monkey</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1 class="display-4">🐵 Adopt-a-Monkey</h1>
+            <p class="lead">Find your perfect monkey companion and give them a loving home!</p>
+        </div>
+    </div>
+
+    @if (monkeys == null)
+    {
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2"><em>Loading our adorable monkeys...</em></p>
+        </div>
+    }
+    else if (!monkeys.Any())
+    {
+        <div class="alert alert-warning text-center" role="alert">
+            <h4>No monkeys available right now</h4>
+            <p>Please try again later!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <!-- Current Monkey Card -->
+                <div class="card monkey-card shadow-lg mb-4">
+                    <div class="card-img-container">
+                        <img src="@currentMonkey.Image" 
+                             class="card-img-top monkey-image" 
+                             alt="@currentMonkey.Name"
+                             onerror="this.src='https://via.placeholder.com/400x300?text=🐵'" />
+                    </div>
+                    <div class="card-body">
+                        <h2 class="card-title text-center">@currentMonkey.Name</h2>
+                        <p class="text-muted text-center mb-3">
+                            <i class="bi bi-geo-alt"></i> @currentMonkey.Location
+                        </p>
+                        <p class="card-text">@currentMonkey.Details</p>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <small class="text-muted">
+                                <i class="bi bi-people"></i> Population: @currentMonkey.Population.ToString("N0")
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation Controls -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <button class="btn btn-outline-secondary btn-lg" 
+                            @onclick="PreviousMonkey" 
+                            disabled="@(currentIndex == 0)">
+                        <i class="bi bi-chevron-left"></i> Previous
+                    </button>
+                    
+                    <div class="text-center">
+                        <small class="text-muted">
+                            @(currentIndex + 1) of @monkeys.Count
+                        </small>
+                    </div>
+                    
+                    <button class="btn btn-outline-secondary btn-lg" 
+                            @onclick="NextMonkey" 
+                            disabled="@(currentIndex == monkeys.Count - 1)">
+                        Next <i class="bi bi-chevron-right"></i>
+                    </button>
+                </div>
+
+                <!-- Adopt Button -->
+                <div class="text-center">
+                    <button class="btn btn-success btn-lg adopt-btn" 
+                            @onclick="AdoptMonkey"
+                            disabled="@isAdopted">
+                        <i class="bi bi-heart-fill"></i> 
+                        @(isAdopted ? "Already Adopted!" : "Adopt " + currentMonkey.Name)
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Adoption Success Modal -->
+@if (showAdoptionModal)
+{
+    <div class="modal fade show" style="display: block;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-heart-fill"></i> Adoption Successful!
+                    </h5>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="@adoptedMonkey?.Image" 
+                         class="adopted-monkey-image mb-3" 
+                         alt="@adoptedMonkey?.Name"
+                         onerror="this.src='https://via.placeholder.com/200x150?text=🐵'" />
+                    <h4>Congratulations! 🎉</h4>
+                    <p class="lead">You are now the proud parent of <strong>@adoptedMonkey?.Name</strong>!</p>
+                    <p>Your new monkey friend from <em>@adoptedMonkey?.Location</em> is waiting for you to give them lots of love and bananas! 🍌</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-primary" @onclick="CloseModal">
+                        <i class="bi bi-house-heart"></i> Take Me Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    private List<Monkey>? monkeys;
+    private Monkey currentMonkey = new();
+    private int currentIndex = 0;
+    private bool showAdoptionModal = false;
+    private Monkey? adoptedMonkey;
+    private bool isAdopted = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        monkeys = await MonkeyService.GetMonkeysAsync();
+        if (monkeys?.Any() == true)
+        {
+            currentMonkey = monkeys[0];
+        }
+    }
+
+    private void NextMonkey()
+    {
+        if (monkeys != null && currentIndex < monkeys.Count - 1)
+        {
+            currentIndex++;
+            currentMonkey = monkeys[currentIndex];
+            isAdopted = false;
+        }
+    }
+
+    private void PreviousMonkey()
+    {
+        if (monkeys != null && currentIndex > 0)
+        {
+            currentIndex--;
+            currentMonkey = monkeys[currentIndex];
+            isAdopted = false;
+        }
+    }
+
+    private void AdoptMonkey()
+    {
+        if (!isAdopted)
+        {
+            adoptedMonkey = currentMonkey;
+            showAdoptionModal = true;
+            isAdopted = true;
+        }
+    }
+
+    private void CloseModal()
+    {
+        showAdoptionModal = false;
+    }
+}

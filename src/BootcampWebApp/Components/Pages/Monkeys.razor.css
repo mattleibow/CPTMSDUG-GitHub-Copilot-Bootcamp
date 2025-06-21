@@ -1,0 +1,103 @@
+.monkey-card {
+    border-radius: 1rem;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+.monkey-card:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-container {
+    height: 300px;
+    overflow: hidden;
+    border-radius: 1rem 1rem 0 0;
+}
+
+.monkey-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.monkey-image:hover {
+    transform: scale(1.05);
+}
+
+.adopt-btn {
+    padding: 0.75rem 2rem;
+    border-radius: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+
+.adopt-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
+}
+
+.adopt-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.adopted-monkey-image {
+    width: 200px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 1rem;
+    border: 3px solid #28a745;
+}
+
+.modal-content {
+    border-radius: 1rem;
+    border: none;
+}
+
+.modal-header {
+    border-radius: 1rem 1rem 0 0;
+}
+
+.btn-outline-secondary {
+    border-radius: 2rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.lead {
+    color: #6c757d;
+}
+
+/* Animation for the adoption button */
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    14% { transform: scale(1.1); }
+    28% { transform: scale(1); }
+    42% { transform: scale(1.1); }
+    70% { transform: scale(1); }
+}
+
+.adopt-btn i {
+    animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-img-container {
+        height: 250px;
+    }
+    
+    .btn-lg {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+}
