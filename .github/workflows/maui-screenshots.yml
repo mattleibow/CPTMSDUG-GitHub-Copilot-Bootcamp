@@ -1,0 +1,77 @@
+name: Generate MAUI App Screenshots
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'src/BootcampMauiApp/**'
+      - '.github/workflows/maui-screenshots.yml'
+
+jobs:
+  generate-screenshots:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Install .NET MAUI workload
+        run: |
+          dotnet workload install maui-android --source https://api.nuget.org/v3/index.json
+
+      - name: Build MAUI Android app
+        run: |
+          cd src/BootcampMauiApp
+          dotnet build -c Debug -f net9.0-android
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies
+        run: |
+          pip install Pillow
+
+      - name: Generate MAUI app screenshots
+        run: |
+          python3 scripts/generate-maui-screenshots.py
+
+      # Uncomment the following steps if you have Android emulator setup
+      # - name: Enable KVM group perms
+      #   run: |
+      #     echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+      #     sudo udevadm control --reload-rules
+      #     sudo udevadm trigger --name-match=kvm
+
+      # - name: Run Android emulator and capture screenshots
+      #   uses: reactivecircus/android-emulator-runner@v2
+      #   with:
+      #     api-level: 30
+      #     target: google_apis
+      #     arch: x86_64
+      #     script: ./scripts/capture-maui-screenshots.sh
+
+      - name: Upload screenshots as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: maui-app-screenshots
+          path: docs/images/maui-app-*.png
+
+      - name: Commit screenshots
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add docs/images/maui-app-*.png docs/images/maui-screenshots-metadata.json
+          git diff --staged --quiet || git commit -m "Add MAUI Android app screenshots"
+          
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
