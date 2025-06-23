@@ -1,0 +1,16 @@
+{
+  "generator": "MAUI Android Screenshot Generator",
+  "description": "Mock screenshots of the MAUI Android app",
+  "screenshots": [
+    {
+      "filename": "maui-app-initial.png",
+      "description": "Initial app view showing the Home page",
+      "page": "Home"
+    },
+    {
+      "filename": "maui-app-after-swipe.png",
+      "description": "App view after swiping left to Counter page",
+      "page": "Counter"
+    }
+  ]
+}
